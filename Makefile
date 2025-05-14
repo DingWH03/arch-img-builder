@@ -2,6 +2,9 @@
 
 SCRIPTS_DIR := script
 SHELL := /bin/bash
+TOOLCHAIN_DIR := $(shell pwd)/toolchain
+TOOLS_DIR := $(shell pwd)/tools
+PATH := $(PATH):$(TOOLCHAIN_DIR)/bin:$(TOOLS_DIR)/bin
 
 all: genimg
 

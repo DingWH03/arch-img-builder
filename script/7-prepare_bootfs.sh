@@ -2,6 +2,12 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+if [[ "$(id -u)" -eq 0 ]]; then
+  SUDO=""
+else
+  SUDO="$SUDO"
+fi
+
 WORK_DIR=$(pwd)
 
 # 默认参数
@@ -64,31 +70,31 @@ gen_bootfs() {
     echo "   bootfs size: $BOOTFS_SIZE bytes"
 
     echo "→ 删除旧镜像并创建空镜像"
-    rm -f "$BOOTFS_IMG"
-    fallocate -l "${BOOTFS_SIZE}" "$BOOTFS_IMG"
+    rm -f "$IMGS_DIR/$BOOTFS_IMG"
+    fallocate -l "${BOOTFS_SIZE}" "$IMGS_DIR/$BOOTFS_IMG"
 
     echo "→ 格式化为 FAT"
-    mkfs.vfat -n BOOTFS "$BOOTFS_IMG"
+    mkfs.vfat -n BOOTFS "$IMGS_DIR/$BOOTFS_IMG"
 
     echo "→ 挂载镜像到 $BOOTFS_MOUNT"
     mkdir -p "$BOOTFS_MOUNT"
-    sudo mount -o loop "$BOOTFS_IMG" "$BOOTFS_MOUNT"
+    $SUDO mount -o loop "$IMGS_DIR/$BOOTFS_IMG" "$BOOTFS_MOUNT"
 
     echo "→ 拷贝启动文件到 bootfs"
-    sudo cp -f "$UENV_TXT"                              "$BOOTFS_MOUNT/"
-    sudo cp -f "$UBOOT_LOGO"                            "$BOOTFS_MOUNT/"
-    sudo cp -f "$KERNEL_DIR/$KERNEL_IMAGE"              "$BOOTFS_MOUNT/"
-    sudo cp -f $DTB_DIR/$DTB_PATTERN                    "$BOOTFS_MOUNT/"
+    $SUDO cp -f "$UENV_TXT"                              "$BOOTFS_MOUNT/"
+    $SUDO cp -f "$UBOOT_LOGO"                            "$BOOTFS_MOUNT/"
+    $SUDO cp -f "$KERNEL_DIR/$KERNEL_IMAGE"              "$BOOTFS_MOUNT/"
+    $SUDO cp -f $DTB_DIR/$DTB_PATTERN                    "$BOOTFS_MOUNT/"
     if [[ -n "$INITRAMFS_IMAGE" ]]; then
-        sudo cp -f "$IMGS_DIR/$INITRAMFS_IMAGE"         "$BOOTFS_MOUNT/initramfs-generic.img"
+        $SUDO cp -f "$IMGS_DIR/$INITRAMFS_IMAGE"         "$BOOTFS_MOUNT/initramfs-generic.img"
     fi
 
     echo "→ 同步并卸载"
     sync
-    sudo umount "$BOOTFS_MOUNT"
+    $SUDO umount "$BOOTFS_MOUNT"
     rmdir "$BOOTFS_MOUNT"
 
-    echo "→ 成功：BOOTFS 镜像生成在 $BOOTFS_IMG"
+    echo "→ 成功：BOOTFS 镜像生成在 $IMGS_DIR/$BOOTFS_IMG"
 }
 
 main() {

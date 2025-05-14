@@ -7,8 +7,13 @@ TOOLCHAIN_DIR="toolchain"
 mkdir -p "$TOOLCHAIN_DIR"
 cd "$TOOLCHAIN_DIR"
 
-echo "→ 下载交叉工具链..."
-wget "$TOOLCHAIN_URL" -O toolchain.tar.xz
-tar --strip-components=1 -xf toolchain.tar.xz
-rm toolchain.tar.xz
-
+# 判断目录是否为空
+if [ -z "$(find . -mindepth 1 -print -quit)" ]; then
+    echo "→ 下载交叉工具链..."
+    wget "$TOOLCHAIN_URL" -O toolchain.tar.xz
+    tar --strip-components=2 -xf toolchain.tar.xz
+    rm toolchain.tar.xz
+    echo "✓ 工具链安装完成"
+else
+    echo "✓ $TOOLCHAIN_DIR 已安装，跳过下载"
+fi

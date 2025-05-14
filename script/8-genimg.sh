@@ -39,6 +39,11 @@ gen_sdcard_img() {
         exit 1
     fi
     echo "成功生成 SD 卡镜像: $IMGS_DIR/$SDCARD_IMAGE"
+
+    echo "→ 开始压缩 SD卡 镜像（xz）..."
+    rm -f "$IMGS_DIR/$SDCARD_IMAGE.xz"
+    xz -k -T0 -9 "$IMGS_DIR/$SDCARD_IMAGE"
+    echo "已生成压缩文件: $IMGS_DIR/$SDCARD_IMAGE.xz"
 }
 
 pack_image_zip() {

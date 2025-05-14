@@ -1,8 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 
+if [[ "$(id -u)" -eq 0 ]]; then
+  SUDO=""
+else
+  SUDO="$SUDO"
+fi
+
+
 # 镜像及挂载目录
-IMG="rootfs.img"
+IMG="output/rootfs.img"
 IMG_SIZE="2G"
 ROOTFS_DIR="rootfs"
 
@@ -23,19 +30,19 @@ mkfs.ext4 -F "${IMG}"
 # 3. 准备挂载点并挂载
 mkdir -p "${ROOTFS_DIR}"
 echo "→ 挂载 ${IMG} 到 ${ROOTFS_DIR}"
-sudo mount -o loop "${IMG}" "${ROOTFS_DIR}"
+$SUDO mount -o loop "${IMG}" "${ROOTFS_DIR}"
 
 # 4. 下载并解压根文件系统
 echo "→ 下载 ROOTFS"
 wget -q "${ROOTFS_URL}" -O "${ARCHIVE}"
 echo "→ 解压到 ${ROOTFS_DIR}"
 # --strip-components=1 去掉最外层目录
-sudo tar --numeric-owner -xvf "${ARCHIVE}" -C "${ROOTFS_DIR}"
+$SUDO tar --numeric-owner -xvf "${ARCHIVE}" -C "${ROOTFS_DIR}"
 
 # 5. 清理
 rm "${ARCHIVE}"
 echo "→ 同步并卸载"
 sync
-sudo umount "${ROOTFS_DIR}"
+$SUDO umount "${ROOTFS_DIR}"
 
 echo "→ 完成：镜像文件 ${IMG} 已包含根文件系统"

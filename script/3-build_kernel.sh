@@ -69,6 +69,7 @@ build() {
 
 make_output() {
     echo "→ 复制编译产物"
+    mkdir -p "$OUT"
     # 核心镜像
     cp -v "$SRC/arch/$ARCH/boot/Image"      "$OUT/"
     cp -v "$SRC/arch/$ARCH/boot/Image.gz"   "$OUT/" 2>/dev/null || true
