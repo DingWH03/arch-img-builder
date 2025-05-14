@@ -64,7 +64,7 @@ config() {
 
 build() {
     echo "→ 开始编译"
-    make -j"$JOBS" ARCH="$ARCH" CROSS_COMPILE="$CROSS_COMPILE" V=1
+    make -j"$JOBS" ARCH="$ARCH" CROSS_COMPILE="$CROSS_COMPILE"
 }
 
 make_output() {

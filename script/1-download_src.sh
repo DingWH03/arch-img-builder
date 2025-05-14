@@ -7,13 +7,13 @@ mkdir -p "$SRC_DIR"
 
 # 每个仓库的 Git 地址和分支名（如有需要可修改）
 KERNEL_REPO="https://gitee.com/bianbu-linux/linux-6.6.git"
-KERNEL_BRANCH="k1-bl-v2.1.y"
+KERNEL_BRANCH="k1-bl-v2.2.y"
 
 UBOOT_REPO="https://gitee.com/bianbu-linux/uboot-2022.10.git"
-UBOOT_BRANCH="k1-bl-v2.1.y"
+UBOOT_BRANCH="k1-bl-v2.2.y"
 
 OPENSBI_REPO="https://gitee.com/bianbu-linux/opensbi.git"
-OPENSBI_BRANCH="k1-bl-v2.1.y"
+OPENSBI_BRANCH="k1-bl-v2.2.y"
 
 # 克隆函数
 clone_repo() {

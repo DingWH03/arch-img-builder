@@ -5,7 +5,7 @@ IFS=$'\n\t'
 if [[ "$(id -u)" -eq 0 ]]; then
   SUDO=""
 else
-  SUDO="$SUDO"
+  SUDO="sudo"
 fi
 
 WORK_DIR=$(pwd)
