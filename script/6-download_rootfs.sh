@@ -40,7 +40,10 @@ echo "→ 解压到 ${ROOTFS_DIR}"
 $SUDO tar --numeric-owner -xvf "${ARCHIVE}" -C "${ROOTFS_DIR}"
 
 # 5. 清理
-rm "${ARCHIVE}"
+if [ -z "$NO_CLEAN" ]; then
+  rm "${ARCHIVE}"
+fi
+
 echo "→ 同步并卸载"
 sync
 $SUDO umount "${ROOTFS_DIR}"

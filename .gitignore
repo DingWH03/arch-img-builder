@@ -3,3 +3,4 @@ output/
 rootfs/
 toolchain/
 /*.img
+archriscv-latest.tar.zst

@@ -9,6 +9,7 @@ WORK_DIR=$(pwd)
 SRC="src/linux"
 ARCH="riscv"
 OUT="output/kernel"
+DEFCONFIG="k1_defconfig"
 CONFIG="board/k1/config/kernel.config"
 CROSS_COMPILE="riscv64-unknown-linux-gnu-"
 
@@ -56,15 +57,15 @@ clean() {
 
 config() {
     echo "→ 生成 .config ($CONFIG)"
-    # make ARCH="$ARCH" CROSS_COMPILE="$CROSS_COMPILE" "$CONFIG"
+    make ARCH="$ARCH" CROSS_COMPILE="$CROSS_COMPILE" "$DEFCONFIG"
+    
+    # cp $CONFIG "$SRC/.config"
     # make ARCH="$ARCH" olddefconfig
-    cp $CONFIG "$SRC/.config"
-    make ARCH="$ARCH" olddefconfig
 }
 
 build() {
     echo "→ 开始编译"
-    make -j"$JOBS" ARCH="$ARCH" CROSS_COMPILE="$CROSS_COMPILE"
+    LOCALVERSION="" make -j"$JOBS" ARCH="$ARCH" CROSS_COMPILE="$CROSS_COMPILE"
 }
 
 make_output() {
@@ -105,7 +106,9 @@ main() {
     make_output
 
     echo "编译完成"
-    clean_src
+    if [ -z "$NO_CLEAN" ]; then
+        clean_src
+    fi
 }
 
 main "$@"
