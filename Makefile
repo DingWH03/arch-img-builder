@@ -33,7 +33,7 @@ download_rootfs: build_opensbi
 	@$(SCRIPTS_DIR)/6-download_rootfs.sh
 
 prepare_bootfs: download_rootfs
-	@if [ -z "$(NO_CLEAN)" ]; then \
+	@if [ -z "${NO_CLEAN:-}" ]; then \
 		echo "→ Cleaning src/"; \
 		rm -rf src/; \
 	else \

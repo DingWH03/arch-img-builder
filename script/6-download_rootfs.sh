@@ -40,7 +40,7 @@ echo "→ 解压到 ${ROOTFS_DIR}"
 $SUDO tar --numeric-owner -xvf "${ARCHIVE}" -C "${ROOTFS_DIR}"
 
 # 5. 清理
-if [ -z "$NO_CLEAN" ]; then
+if [ -z "${NO_CLEAN:-}" ]; then
   rm "${ARCHIVE}"
 fi
 

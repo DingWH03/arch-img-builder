@@ -70,7 +70,7 @@ pack_image_zip() {
             env.bin \
             bootfs.img \
             rootfs.img \
-            partition_sd.json \
+            partition_*.json \
             fastboot.yaml \
             genimage.cfg \
             -r factory

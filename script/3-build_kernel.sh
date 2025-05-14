@@ -106,7 +106,7 @@ main() {
     make_output
 
     echo "编译完成"
-    if [ -z "$NO_CLEAN" ]; then
+    if [ -z "${NO_CLEAN:-}" ]; then
         clean_src
     fi
 }
