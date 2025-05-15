@@ -96,9 +96,9 @@ make_output() {
     cp -v "$SRC/arch/$ARCH/boot/dts"/*/*.dtb "$OUT/dtb/"
 
     # 内核modules
-    make INSTALL_MOD_PATH=$OUT modules_install
-    rm -rf "$OUT/lib/modules/$KERNEL_VERSION/build"
-    rm -rf "$OUT/lib/modules/$KERNEL_VERSION/kernel"
+    make INSTALL_MOD_PATH=$INITRAMFS_OVERLAY modules_install
+    rm -rf "$INITRAMFS_OVERLAY/lib/modules/$KERNEL_VERSION/build"
+    rm -rf "$INITRAMFS_OVERLAY/lib/modules/$KERNEL_VERSION/kernel"
 }
 
 clean_src() {
@@ -120,9 +120,9 @@ main() {
     # 导出环境
     export ARCH CROSS_COMPILE O="$OUT"
 
-    # clean       # 失败自动退出
-    # config      # 失败自动退出
-    #build       # 失败自动退出
+    clean       # 失败自动退出
+    config      # 失败自动退出
+    build       # 失败自动退出
     make_output
 
     echo "编译完成"
