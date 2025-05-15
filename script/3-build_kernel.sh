@@ -11,7 +11,18 @@ ARCH="riscv"
 OUT="output/kernel"
 DEFCONFIG="k1_defconfig"
 CONFIG="board/k1/config/kernel.config"
+INITRAMFS_OVERLAY="board/k1/initramfs_overlay"
 CROSS_COMPILE="riscv64-unknown-linux-gnu-"
+
+kernel_version() {
+    # 提取VERSION, PATCHLEVEL和SUBLEVEL的值
+    version=$(grep '^VERSION' $SRC/Makefile | awk -F'=' '{print$2}' | xargs)
+    patchlevel=$(grep '^PATCHLEVEL' $SRC/Makefile | awk -F'=' '{print$2}' | xargs)
+    sublevel=$(grep '^SUBLEVEL' $SRC/Makefile | awk -F'=' '{print$2}' | xargs)
+
+    # 拼接版本号
+    KERNEL_VERSION="${version}.${patchlevel}.${sublevel}"
+}
 
 print_header() {
     echo "====== 编译 kernel ======"
@@ -20,6 +31,7 @@ print_header() {
     echo "架构         : $ARCH"
     echo "输出目录     : $OUT"
     echo "配置         : $CONFIG"
+    echo "版本号     : $KERNEL_VERSION"
     echo "交叉编译前缀 : $CROSS_COMPILE"
     echo "并发线程数   : $JOBS"
     echo "========================"
@@ -41,6 +53,7 @@ parse_args() {
     [[ "${SRC:0:1}" != "/" ]] && SRC="$WORK_DIR/$SRC"
     [[ "${OUT:0:1}" != "/" ]] && OUT="$WORK_DIR/$OUT"
     [[ "${CONFIG:0:1}" != "/" ]] && CONFIG="$WORK_DIR/$CONFIG"
+    [[ "${INITRAMFS_OVERLAY:0:1}" != "/" ]] && INITRAMFS_OVERLAY="$WORK_DIR/$INITRAMFS_OVERLAY"
 
     # 参数检查
     if [[ -z "$SRC" || -z "$ARCH" || -z "$OUT" ]]; then
@@ -82,6 +95,10 @@ make_output() {
     mkdir -p "$OUT/dtb"
     cp -v "$SRC/arch/$ARCH/boot/dts"/*/*.dtb "$OUT/dtb/"
 
+    # 内核modules
+    make INSTALL_MOD_PATH=$OUT modules_install
+    rm -rf "$OUT/lib/modules/$KERNEL_VERSION/build"
+    rm -rf "$OUT/lib/modules/$KERNEL_VERSION/kernel"
 }
 
 clean_src() {
@@ -92,6 +109,9 @@ clean_src() {
 main() {
     parse_args "$@"
     JOBS=$(nproc)
+
+    kernel_version
+    
     print_header
 
     # 进入源码目录
@@ -100,9 +120,9 @@ main() {
     # 导出环境
     export ARCH CROSS_COMPILE O="$OUT"
 
-    clean       # 失败自动退出
-    config      # 失败自动退出
-    build       # 失败自动退出
+    # clean       # 失败自动退出
+    # config      # 失败自动退出
+    #build       # 失败自动退出
     make_output
 
     echo "编译完成"
