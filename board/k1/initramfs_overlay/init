@@ -6,6 +6,8 @@ NFSROOT=
 export init=/sbin/init
 mount -t sysfs sysfs /sys
 mount -t devtmpfs -o nosuid,mode=0755 devtmpfs /dev
+busybox mdev -s
+
 
 for x in $(cat /proc/cmdline); do
 	case $x in

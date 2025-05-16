@@ -1,0 +1,1 @@
+ --kver '6.6.63' -c '/bianbu-linux/output/k1_v2/build/buildroot-fs/cpio/empty-config' --confdir '/bianbu-linux/output/k1_v2/build/buildroot-fs/cpio/confdir' --sysroot '/bianbu-linux/output/k1_v2/build/buildroot-fs/cpio/target' --tmpdir '/bianbu-linux/output/k1_v2/build/buildroot-fs/cpio/tmp' -M --force --no-compress

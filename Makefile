@@ -40,6 +40,8 @@ prepare_bootfs: download_rootfs
 		echo "→ Skipping clean (NO_CLEAN is set)"; \
 	fi
 	@echo "→ Step 7: 准备 BootFS"
+	@echo "→ Step 7: 生成initramfs"
+	@$(SCRIPTS_DIR)/build_initramfs.sh
 	@$(SCRIPTS_DIR)/7-prepare_bootfs.sh
 
 genimg: prepare_bootfs
