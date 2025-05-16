@@ -41,7 +41,7 @@ echo "→ 解压到 ${ROOTFS_DIR}"
 $SUDO tar --numeric-owner -xvf "${ARCHIVE}" -C "${ROOTFS_DIR}"
 
 if [[ -d "$OVERLAY" ]]; then
-        cp -a "$OVERLAY"/* "${ROOTFS_DIR}"
+        $SUDO cp -a "$OVERLAY"/* "${ROOTFS_DIR}"
     else
         echo "警告：overlay 目录不存在，跳过合并" >&2
     fi
