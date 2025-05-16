@@ -12,6 +12,7 @@ fi
 IMG="output/rootfs.img"
 IMG_SIZE="2G"
 ROOTFS_DIR="rootfs"
+OVERLAY="board/k1/rootfs_overlay"
 
 # 根文件系统下载地址
 ROOTFS_URL="https://archriscv.felixc.at/images/archriscv-latest.tar.zst"
@@ -38,6 +39,12 @@ wget -q "${ROOTFS_URL}" -O "${ARCHIVE}"
 echo "→ 解压到 ${ROOTFS_DIR}"
 # --strip-components=1 去掉最外层目录
 $SUDO tar --numeric-owner -xvf "${ARCHIVE}" -C "${ROOTFS_DIR}"
+
+if [[ -d "$OVERLAY" ]]; then
+        cp -a "$OVERLAY"/* "${ROOTFS_DIR}"
+    else
+        echo "警告：overlay 目录不存在，跳过合并" >&2
+    fi
 
 # 5. 清理
 if [ -z "${NO_CLEAN:-}" ]; then

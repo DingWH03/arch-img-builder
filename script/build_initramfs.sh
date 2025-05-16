@@ -51,7 +51,7 @@ clone_busybox() {
     else
         echo "开始下载 BusyBox 源码..."
         mkdir -p "$SRC"
-        wget -O - "$BUSYBOX_SRC" | tar -xjf - -C "$SRC" --strip-components=
+        wget -O - "$BUSYBOX_SRC" | tar -xjf - -C "$SRC" --strip-components=1
     fi
     rm "$SRC/networking/tc.c"
 }
