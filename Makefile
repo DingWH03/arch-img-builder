@@ -29,16 +29,16 @@ build_opensbi: build_uboot
 	@$(SCRIPTS_DIR)/5-build_opensbi.sh
 
 download_rootfs: build_opensbi
-	@echo "→ Step 6: 下载 RootFS"
-	@$(SCRIPTS_DIR)/6-download_rootfs.sh
-
-prepare_bootfs: download_rootfs
 	@if [ -z "${NO_CLEAN:-}" ]; then \
 		echo "→ Cleaning src/"; \
 		rm -rf src/; \
 	else \
 		echo "→ Skipping clean (NO_CLEAN is set)"; \
 	fi
+	@echo "→ Step 6: 下载 RootFS"
+	@$(SCRIPTS_DIR)/6-download_rootfs.sh
+
+prepare_bootfs: download_rootfs
 	@echo "→ Step 7: 准备 BootFS"
 	@echo "→ Step 7: 生成initramfs"
 	@$(SCRIPTS_DIR)/build_initramfs.sh
