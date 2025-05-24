@@ -15,7 +15,8 @@ ROOTFS_DIR="rootfs"
 OVERLAY="board/k1/rootfs_overlay"
 
 # 根文件系统下载地址
-ROOTFS_URL="https://archriscv.felixc.at/images/archriscv-latest.tar.zst"
+# ROOTFS_URL="https://archriscv.felixc.at/images/archriscv-latest.tar.zst"
+ROOTFS_URL="https://github.com/DingWH03/arch-img-builder/releases/download/arch-v1-k1-bl-v2.2.y/archrootfs.tar.gz"
 ARCHIVE="archriscv-latest.tar.zst"
 
 # 1. 创建一个 2G 的空镜像文件
